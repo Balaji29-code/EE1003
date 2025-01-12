@@ -2,7 +2,7 @@
 \let\negthickspace\undefined
 \documentclass[journal]{IEEEtran}
 \usepackage[a5paper, margin=10mm, onecolumn]{geometry}
-%\usepackage{lmodern} % Ensure lmodern is loaded for pdflatex
+\usepackage{lmodern} % Ensure lmodern is loaded for pdflatex
 \usepackage{tfrupee} % Include tfrupee package
 
 \setlength{\headheight}{1cm} % Set the height of the header box
@@ -24,13 +24,13 @@
 \usepackage{comment}
 \usepackage[breaklinks=true]{hyperref}
 \usepackage{tkz-euclide} 
-\usepackage{listings}
-% \usepackage{gvv}                                        
+\usepackage{listings}                                      
 \def\inputGnumericTable{}                                 
 \usepackage[latin1]{inputenc}                                
 \usepackage{color}                                            
 \usepackage{array}                                            
-\usepackage{longtable}                                       
+\usepackage{longtable}
+\usepackage{multicol}
 \usepackage{calc}                                             
 \usepackage{multirow}                                         
 \usepackage{hhline}                                           
@@ -42,7 +42,7 @@
 \vspace{3cm}
 
 \title{12.9.2.2}
-\author{Balaji B - EE24BTECH11010}
+\author{EE24BTECH11010 - Balaji B}
 % \maketitle
 % \newpage
 % \bigskip
@@ -57,83 +57,77 @@
 \numberwithin{figure}{enumi}
 \renewcommand{\thetable}{\theenumi}
 
-\textbf{Question:}\\
-Consider the differential equation 
-\begin{align}
-    y^\prime - 2x - 2 = 0
-\end{align}
-Verify that
-\begin{align}
-    y = x^2 + 2x + C
-\end{align}
-is a solution for it.\\
-\textbf{Theoretical Solution:}
 
-The given differential equation is:
-\begin{align}
-    y^\prime - 2x - 2 = 0
-\end{align}
+\textbf{Question}:\\
+Solve the differential equation $y^{\prime}-2x-2 = 0$ with initial conditions $y\brak{0} = 0$
 
-Rearrange the terms to group all  $x$ and $y$ related terms:
+\textbf{Theoretical Solution:}\\
+We apply the Laplace transform to each term in the equation. The Laplace transforms for the derivatives of $y\brak{x}$ are:
 \begin{align}
-    y^\prime = 2x + 2
+\mathcal{L}\cbrak{y^{\prime}\brak{x}} &= sY\brak{s} - y\brak{0} \\
+\mathcal{L}\cbrak{2x} &= 2 \cdot \frac{1!}{s^2} = \frac{2}{s^2}, \\
+\mathcal{L}\cbrak{2} &= \frac{2}{s}.
 \end{align}
+Now, applying the Laplace transform to the entire differential equation:
+\begin{align}
+\mathcal{L}\cbrak{y^{\prime}-2x-2} &= 0\\
+\mathcal{L}\cbrak{y^{\prime}\brak{x}} - \mathcal{L}\cbrak{2x} - \mathcal{L}\cbrak{2} &= 0 \\
+sY\brak{s} - y\brak{0} - \frac{2}{s^2} - \frac{2}{s} &= 0
+\end{align}
+Substitute the initial conditions $y\brak{0} = 0$, we get
+\begin{align}
+sY\brak{s} - 0 - \frac{2}{s^2} - \frac{2}{s} &= 0
+\end{align}
+Simplify the equation:
+\begin{align}
+    sY(s) =  \frac{2}{s^2} + \frac{2}{s}\\
+    Y(s) =  \frac{2}{s^3} + \frac{2}{s^2}
+\end{align}
+Now, take the inverse Laplace transform \\
+\begin{align}
+y(x) &= \mathcal{L}^{-1}\cbrak{Y(s)}\\
+y(x) &=   \mathcal{L}^{-1}\cbrak{\frac{2}{s^3}} + \mathcal{L}^{-1}\cbrak{\frac{2}{s^2}}\\
+y(x) &=  2x + x^2
+\end{align}
+Region of Convergence:\\
+The denominator indicates a pole at $s= 0 $. To ensure convergence of the Laplace transform integral, the real part of $s$ must satisfy:
+\begin{align}
+    Re\brak{s}>0
+\end{align}
+So the Laplace transform converges for values of $s$ with real part greater than 0\\
 
-Now integrate both sides with respect to $x$:
-\begin{align}
-    \int y^\prime dx = \int \brak{2x + 2} dx
-\end{align}
-
-The left-hand side simplifies to  $y$, and the right-hand side is integrated term by term:
-\begin{align}
-    y = \int 2x dx + \int 2 dx \\
-    y = x^2 + 2x + C
-\end{align}
-
-This matches the assumed solution:
-\begin{align}
-    y = x^2 + 2x + C
-\end{align}
 \textbf{Computational Solution: }\\ \\
-The \textbf{ bilinear transform} is used to approximate the continuous derivative $y^{\prime}$ and reformulate the differential equation into a discrete time difference equation.\\ \\
-Consider a first order differential equation of the form
+The \textbf{ bilinear transform} is used to approximate the continuous derivative $y^{\prime}$ and reformulate the differential equation into a discrete time difference equation.\\
+Applying the Laplace transform to both sides of the differential equation, we get
 \begin{align}
-    y^\prime = f\brak{x,y}
+sY\brak{s} - 0 - \frac{2}{s^2} - \frac{2}{s} &= 0\\
+sY(s) =  \frac{2}{s^2} + \frac{2}{s}\\
+Y(s) =  \frac{2}{s^3} + \frac{2}{s^2}
 \end{align}
-The derivative $y^\prime$ in the equation is approximated using the bilinear transform. In the bilinear transform, the derivative is expressed in discrete form as: \\
+Apply Bilinear Transform with $T=h$
 \begin{align}
-    y^\prime \approx \frac{y_{n+1} - y_n}{h}
+    s&=\frac{2}{T}\frac{1-z^{-1}}{1+z^{-1}}
 \end{align}
-Substituting this approximation into the general equation gives:
+Substituting the above in our Laplace equation we get,
 \begin{align}
-    \frac{y_{n+1} - y_n}{h} = f\brak{x,y}
+    Y(z) &= \frac{2}{\brak{\frac{2}{T}\frac{1-z^{-1}}{1+z^{-1}}}^3} + \frac{2}{\brak{\frac{2}{T}\frac{1-z^{-1}}{1+z^{-1}}}^2} \\ 
+    Y(z) &= \frac{2}{\brak{\frac{2}{h}\frac{1-z^{-1}}{1+z^{-1}}}^3} + \frac{2}{\brak{\frac{2}{h}\frac{1-z^{-1}}{1+z^{-1}}}^2}
 \end{align}
-The Trapezoidal rule is applied to $f\brak{x,y}$ to approximate the value of $f\brak{x,y}$ over the interval $\sbrak{x_n,x_{n+1}}$.
+On rearranging and neglecting the powers greater than 2 of $h$ we get,
 \begin{align}
-    f\brak{x,y} \approx \frac{1}{2} \sbrak{f\brak{x_n,y_n} + f\brak{x_{n+1},y_{n+1}}}
+    (1 - z^{-1})^3Y(z) &= \frac{h^2\brak{1 - z^{-2}}\brak{1 + z^{-1}}}{2} \\
+    \brak{1 - 3z^{-1} + 3z^{-2} - z^{-3}}Y(z) &= \frac{h^2\brak{1 + z^{-1} - z^{-2} - z^{-3}}}{2}
 \end{align}
-Substitute this into the discretized equation:
+Applying $Z$ transform we get
 \begin{align}
-    \frac{y_{n+1} - y_n}{h} = \frac{1}{2} \sbrak{f\brak{x_n,y_n} + f\brak{x_{n+1},y_{n+1}}}
+    y_n - 3y_{n-1} + 3y_{n-2} - y_{n-3} &= \frac{h^2 \brak{\delta\sbrak{n}+\delta\sbrak{n-1}-\delta\sbrak{n-2}-\delta\sbrak{n-3}}}{2}
 \end{align}
-Rearranging for $y_{n+1}$, we get 
-\begin{align}
-    y_{n+1} = y_{n} + \frac{h}{2} \sbrak{f\brak{x_n,y_n} + f\brak{x_{n+1},y_{n+1}}}
-\end{align}
-This is the general trapezoidal difference equation obtained using the bilinear transform.
-Smaller the value of $h$ will give more precise plot. We obtain points to plot by repeatative iteration. \\
-Substituting our $f\brak{x,y} = 2x+2$ in the above equation we get,
-\begin{align}
-    y_{n+1} = y_{n} + h\brak{x_{n} + x_{n+1}} + 2h 
-\end{align}
-The above equation is the required difference equation.\\ \\
-Below is the comparison between the Theoretical plot and the simulated plot
+\\The above equation is the required difference equation.\\ \\
+Taking the value of $h$ = 0.1, we get the following plot
 
 \begin{figure}[h!]
    \centering
-   \includegraphics[width=1\columnwidth]{figs/fig.png}
-   \caption{Computational vs Theoretical solution of $ y^\prime - 2x - 2 = 0$}
-   \label{stemplot}
+   \includegraphics[width=0.7\columnwidth]{figs/fig.png}
+    \caption{Approximate solution of the DE}
 \end{figure}
 \end{document}
-
